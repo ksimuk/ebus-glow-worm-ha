@@ -1,0 +1,17 @@
+{
+  "domain": "ebus_boiler_glow_worm",
+  "name": "Ebus Glow Worm",
+  "codeowners": [
+    "@ksimuk"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://www.home-assistant.io/integrations/ebus_boiler_glow_worm",
+  "homekit": {},
+  "iot_class": "cloud_polling",
+  "quality_scale": "bronze",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "version": "1.0.0"
+}
