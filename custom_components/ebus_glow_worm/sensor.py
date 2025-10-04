@@ -1,14 +1,20 @@
+"""Sensor platform for eBus Glow-worm boiler integration."""
+
 from __future__ import annotations
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfTemperature, PERCENTAGE, UnitOfEnergy, UnitOfPower
+from homeassistant.const import (
+    UnitOfTemperature,
+    PERCENTAGE,
+    UnitOfEnergy,
+    UnitOfPower,
+    UnitOfPressure,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.typing import StateType
 from .const import DOMAIN
 from .coordinator import EbusGlowWormCoordinator
-
-"""Sensor platform for eBus Glow-worm boiler integration."""
 
 
 from homeassistant.components.sensor import (
@@ -92,7 +98,17 @@ SENSOR_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfPower.WATT,
         state_class=SensorStateClass.MEASUREMENT,
     ),
+    SensorEntityDescription(
+        key="water_pressure",
+        name="Water Pressure",
+        translation_key="water_pressure",
+        device_class=SensorDeviceClass.PRESSURE,
+        native_unit_of_measurement=UnitOfPressure.BAR,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
 )
+
+STAT_KEYS = ["usage_heating", "usage_hot_water", "current_heat_loss", "water_pressure"]
 
 
 async def async_setup_entry(
@@ -105,7 +121,7 @@ async def async_setup_entry(
     entities: list[EbusGlowWormSensor] = []
 
     for description in SENSOR_DESCRIPTIONS:
-        if description.key in ["usage_heating", "usage_hot_water", "current_heat_loss"]:
+        if description.key in STAT_KEYS:
             entities.append(
                 EbusGlowWormStatSensor(
                     coordinator=coordinator,
@@ -142,7 +158,7 @@ class EbusGlowWormSensor(CoordinatorEntity[EbusGlowWormCoordinator], SensorEntit
         self._attr_unique_id = f"{config_entry.entry_id}-{description.key}"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, config_entry.entry_id)},
-            "name": description.name,
+            "name": f"{coordinator.get_name()} {description.name}",
         }
 
     @property
