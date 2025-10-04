@@ -5,7 +5,6 @@ from typing import Any
 
 import requests
 
-from config.custom_components.ebus_boiler_glow_worm.state import EbusoilerData
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_PORT
 from homeassistant.helpers.update_coordinator import (
