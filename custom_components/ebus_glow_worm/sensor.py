@@ -168,6 +168,12 @@ class EbusGlowWormSensor(CoordinatorEntity[EbusGlowWormCoordinator], SensorEntit
             return self.coordinator.data[self.entity_description.key]
         return None
 
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        if self.entity_description.key in self.coordinator.data:
+            return self.coordinator.data[self.entity_description.key] != -1
+        return False
 
 class EbusGlowWormStatSensor(CoordinatorEntity[EbusGlowWormCoordinator], SensorEntity):
     """Sensor for eBus Glow-worm boiler."""
@@ -195,3 +201,10 @@ class EbusGlowWormStatSensor(CoordinatorEntity[EbusGlowWormCoordinator], SensorE
         if self.entity_description.key in self.coordinator.data["stat"]:
             return self.coordinator.data["stat"][self.entity_description.key]
         return None
+
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        if self.entity_description.key in self.coordinator.data["stat"]:
+            return self.coordinator.data["stat"][self.entity_description.key] != -1
+        return False
