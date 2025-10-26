@@ -94,7 +94,7 @@ SENSOR_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         key="current_heat_loss",
         name="House Estimated Heat Loss",
         translation_key="current_heat_loss",
-        device_class=SensorDeviceClass.ENERGY,
+        device_class=SensorDeviceClass.POWER,
         native_unit_of_measurement=UnitOfPower.WATT,
         state_class=SensorStateClass.MEASUREMENT,
     ),
@@ -111,7 +111,7 @@ SENSOR_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         name="Boiler Runtime",
         translation_key="runtime",
         device_class=SensorDeviceClass.DURATION,
-        native_unit_of_measurement="minutes",
+        native_unit_of_measurement="min",
         state_class=SensorStateClass.MEASUREMENT,
     ),
     # hwc_demand string entity "yes" or "no"
@@ -120,10 +120,8 @@ SENSOR_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         name="Hot Water Demand",
         translation_key="hwc_demand",
         device_class=SensorDeviceClass.ENUM,
-        native_unit_of_measurement=None,
-        state_class=SensorStateClass.MEASUREMENT,
+        options=list(HWC_DEMAND_OPTIONS := ["yes", "no"]),
     ),
-
 )
 
 STAT_KEYS = [
@@ -132,7 +130,7 @@ STAT_KEYS = [
     "current_heat_loss",
     "water_pressure",
     "runtime",
-    "hwc_demand"
+    "hwc_demand",
 ]
 
 
@@ -199,6 +197,7 @@ class EbusGlowWormSensor(CoordinatorEntity[EbusGlowWormCoordinator], SensorEntit
         if self.entity_description.key in self.coordinator.data:
             return self.coordinator.data[self.entity_description.key] != -1
         return False
+
 
 class EbusGlowWormStatSensor(CoordinatorEntity[EbusGlowWormCoordinator], SensorEntity):
     """Sensor for eBus Glow-worm boiler."""
