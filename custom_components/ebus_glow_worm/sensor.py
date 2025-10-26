@@ -106,9 +106,34 @@ SENSOR_DESCRIPTIONS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfPressure.BAR,
         state_class=SensorStateClass.MEASUREMENT,
     ),
+    SensorEntityDescription(
+        key="runtime",
+        name="Boiler Runtime",
+        translation_key="runtime",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement="minutes",
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    # hwc_demand string entity "yes" or "no"
+    SensorEntityDescription(
+        key="hwc_demand",
+        name="Hot Water Demand",
+        translation_key="hwc_demand",
+        device_class=SensorDeviceClass.ENUM,
+        native_unit_of_measurement=None,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+
 )
 
-STAT_KEYS = ["usage_heating", "usage_hot_water", "current_heat_loss", "water_pressure"]
+STAT_KEYS = [
+    "usage_heating",
+    "usage_hot_water",
+    "current_heat_loss",
+    "water_pressure",
+    "runtime",
+    "hwc_demand"
+]
 
 
 async def async_setup_entry(
